@@ -148,13 +148,13 @@ specify check
 
 After running `specify init`, your AI coding agent will have access to these slash commands for structured development:
 
-| Command         | Description                                                           |
-|-----------------|-----------------------------------------------------------------------|
-| `/constitution` | Create or update project governing principles and development guidelines |
-| `/specify`      | Define what you want to build (requirements and user stories)        |
-| `/plan`         | Create technical implementation plans with your chosen tech stack     |
-| `/tasks`        | Generate actionable task lists for implementation                     |
-| `/implement`    | Execute all tasks to build the feature according to the plan         |
+| Command         | Description                                                           | Enhanced Features |
+|-----------------|-----------------------------------------------------------------------|-------------------|
+| `/constitution` | Create or update project governing principles and development guidelines | **MIL-STD-498 Detection**: Automatically creates enterprise document structure when keywords detected |
+| `/specify`      | Define what you want to build (requirements and user stories)        | **CSCI Integration**: Updates MIL-STD-498 documents if structure exists, with automatic functional area mapping |
+| `/plan`         | Create technical implementation plans with your chosen tech stack     | **Adaptive Structure**: Detects web/mobile/CLI projects and creates appropriate directory layouts |
+| `/tasks`        | Generate actionable task lists for implementation                     | **CSCI-Based Tasks**: Generates Frontend/Backend tasks per functional area with parallel execution markers |
+| `/implement`    | Execute all tasks to build the feature according to the plan         | **Parallel Execution**: Handles CSCI-based parallel development and dependency management |
 
 ## 📚 Core philosophy
 
@@ -165,6 +165,151 @@ Spec-Driven Development is a structured process that emphasizes:
 - **Multi-step refinement** rather than one-shot code generation from prompts
 - **Heavy reliance** on advanced AI model capabilities for specification interpretation
 
+## 🏗️ Enhanced Architecture Features
+
+### MIL-STD-498 Integration
+
+Spec Kit now supports the **MIL-STD-498 software development standard** for enterprise-grade documentation and CSCI (Computer Software Configuration Item) based development:
+
+**Key Benefits:**
+- **Functional Separation**: Organize features by business function (authentication, hr, finance) rather than technical layers
+- **Parallel Development**: Frontend and Backend teams can work simultaneously within each functional area
+- **Document Standardization**: 6-document framework ensures comprehensive coverage
+- **Enterprise Compliance**: Follows military-grade software development standards
+
+**Document Framework:**
+1. **OCD (Operational Concept Document)** - Business context and user scenarios
+2. **SSDD (System/Subsystem Design Document)** - Architecture and technology decisions
+3. **SRS-Frontend** - Frontend requirements per functional area
+4. **SRS-Backend** - Backend requirements per functional area
+5. **IDD-Shared** - Interface specifications between Frontend/Backend
+
+**When to Use:**
+- Enterprise projects requiring formal documentation
+- Large teams needing clear separation of concerns
+- Projects with compliance or audit requirements
+- Complex systems with multiple functional domains
+
+### Cross-Platform Script System
+
+Spec Kit provides **dual script support** for maximum compatibility:
+
+**Bash Scripts** (`scripts/bash/`):
+- Linux, macOS, WSL2 environments
+- Superior performance and native Unix integration
+- Advanced shell features and error handling
+
+**PowerShell Scripts** (`scripts/powershell/`):
+- Windows native support
+- Cross-platform PowerShell 7+ compatibility
+- Enterprise Windows environment integration
+
+**Automatic Detection**: Commands automatically select the appropriate script based on your environment
+
+### Template-Driven Development
+
+**Comprehensive Template System:**
+- **Feature Templates**: Structured specification creation with built-in validation
+- **Plan Templates**: Self-executing implementation planning with phase gates
+- **Task Templates**: Dependency-aware task generation with parallel execution support
+- **Constitution Templates**: Organizational governance and principle establishment
+
+**Template Features:**
+- **Placeholder System**: Automatic token replacement (`[PROJECT_NAME]`, `[FEATURE]`)
+- **Validation Gates**: Built-in checks and balancing for quality assurance
+- **Progress Tracking**: Real-time status updates throughout execution
+- **Error Handling**: Comprehensive error detection and recovery mechanisms
+
+### Advanced Workflow Features
+
+**Intelligent Branch Management:**
+- **Auto-numbering**: Feature branches follow `001-feature-name` pattern
+- **Context Preservation**: Automatic branch-specific documentation organization
+- **Git Integration**: Seamless version control with PR creation support
+
+**Parallel Development Support:**
+- **Task Markers**: `[P]` annotations for parallelizable tasks
+- **Dependency Management**: Automatic sequential/parallel task identification
+- **CSCI Coordination**: Cross-functional team synchronization
+- **File Conflict Prevention**: Smart task scheduling to avoid conflicts
+
+**Test-Driven Development Integration:**
+- **TDD Enforcement**: Tests must be written and failing before implementation
+- **Contract Testing**: API specification validation before development
+- **Integration Testing**: End-to-end scenario validation
+- **Quality Gates**: Automated quality checks at each phase
+
+## 🎯 Workflow Optimization Guide
+
+### Choosing Your Development Approach
+
+**Standard Workflow** (Recommended for most projects):
+```bash
+/constitution → /specify → /plan → /tasks → /implement
+```
+- **Best for**: Small to medium projects, single team, rapid prototyping
+- **Structure**: Traditional file organization with clear separation
+- **Parallel**: Basic parallel task execution for independent components
+
+**MIL-STD-498 Workflow** (Enterprise/Complex projects):
+```bash
+/constitution "Include MIL-STD-498 structure with CSCIs: authentication, hr, finance"
+→ /specify "User management system"
+→ /plan → /tasks → /implement
+```
+- **Best for**: Enterprise projects, large teams, compliance requirements
+- **Structure**: CSCI-based functional organization
+- **Parallel**: Advanced parallel development across functional areas
+
+### Maximizing Development Efficiency
+
+**1. Constitution Optimization:**
+```bash
+# Basic principles
+/constitution Create principles focused on code quality and testing standards
+
+# Enhanced enterprise setup
+/constitution Create principles with MIL-STD-498 structure for authentication, hr, and finance CSCIs
+```
+
+**2. Feature Specification Best Practices:**
+```bash
+# Focus on WHAT and WHY, not HOW
+/specify Build a user authentication system that supports SSO, 2FA, and role-based permissions.
+Users should be able to login via email/password or OAuth providers. The system needs to handle
+10,000+ concurrent users with sub-200ms response times.
+
+# Avoid: Technical implementation details at this stage
+```
+
+**3. Plan Optimization:**
+```bash
+# Specify your exact tech stack and constraints
+/plan Use Node.js with Express, PostgreSQL database, Redis for sessions.
+Deploy to AWS with Docker containers. Support OAuth 2.0 with Google and Microsoft providers.
+Target 99.9% uptime with automatic failover.
+```
+
+**4. Task Generation Strategy:**
+```bash
+# Let the system generate optimized task breakdown
+/tasks
+
+# Result: Automatically creates CSCI-based tasks with parallel execution markers
+```
+
+**5. Implementation Execution:**
+```bash
+# Full automated implementation
+/implement
+
+# Parallel execution will automatically coordinate:
+# - Frontend authentication components [P]
+# - Backend authentication services [P]
+# - Database migrations and setup [P]
+# - Integration tests [P]
+```
+
 ## 🌟 Development phases
 
 | Phase | Focus | Key Activities |
@@ -172,6 +317,168 @@ Spec-Driven Development is a structured process that emphasizes:
 | **0-to-1 Development** ("Greenfield") | Generate from scratch | <ul><li>Start with high-level requirements</li><li>Generate specifications</li><li>Plan implementation steps</li><li>Build production-ready applications</li></ul> |
 | **Creative Exploration** | Parallel implementations | <ul><li>Explore diverse solutions</li><li>Support multiple technology stacks & architectures</li><li>Experiment with UX patterns</li></ul> |
 | **Iterative Enhancement** ("Brownfield") | Brownfield modernization | <ul><li>Add features iteratively</li><li>Modernize legacy systems</li><li>Adapt processes</li></ul> |
+
+## 💡 Advanced Use Cases & Examples
+
+### Enterprise CSCI Development
+
+**Scenario**: Building a complete HR management system with multiple functional areas
+
+```bash
+# 1. Setup enterprise structure
+/constitution Create enterprise-grade constitution with MIL-STD-498 structure.
+Define CSCIs for: employee-management, payroll, benefits, performance-tracking
+
+# 2. Specify core functionality
+/specify Build an HR management system that handles employee onboarding, payroll processing,
+benefits administration, and performance reviews. System needs to integrate with existing
+LDAP directory and support 5,000+ employees across multiple departments.
+
+# 3. Generate implementation plan
+/plan Use .NET 8 with Blazor frontend, SQL Server database, Redis caching.
+Integrate with Azure AD for authentication. Support real-time notifications
+and document management with SharePoint integration.
+
+# 4. Generate CSCI-based tasks
+/tasks
+# Result: Creates parallel task groups:
+# - Employee Management Frontend/Backend tasks [P]
+# - Payroll Frontend/Backend tasks [P]
+# - Benefits Frontend/Backend tasks [P]
+# - Performance Tracking Frontend/Backend tasks [P]
+# - Cross-CSCI integration tasks (sequential)
+
+# 5. Execute with parallel development
+/implement
+# Teams can work simultaneously on different CSCIs
+```
+
+### Rapid Prototyping Workflow
+
+**Scenario**: Quick validation of a startup idea
+
+```bash
+# 1. Minimal constitution for speed
+/constitution Focus on rapid iteration, minimal viable features, and user feedback integration
+
+# 2. MVP specification
+/specify Create a social media scheduler that allows users to plan posts across
+Twitter, LinkedIn, and Instagram. Include basic analytics and team collaboration.
+
+# 3. Simple tech stack
+/plan Use React with Vite, Node.js/Express backend, SQLite database.
+Deploy to Vercel with simple authentication.
+
+# 4. Generate MVP tasks
+/tasks
+# Result: Creates minimal viable task set with parallel execution
+
+# 5. Rapid implementation
+/implement
+# Focuses on core features only, optimized for speed
+```
+
+### Legacy System Modernization
+
+**Scenario**: Modernizing an existing monolithic application
+
+```bash
+# 1. Modernization constitution
+/constitution Establish principles for incremental modernization, backward compatibility,
+and gradual migration strategies
+
+# 2. Modernization specification
+/specify Modernize legacy Java EE customer management system to microservices architecture.
+Maintain existing API compatibility while adding modern UI and cloud deployment.
+
+# 3. Migration-focused planning
+/plan Use Spring Boot microservices, React frontend, PostgreSQL database.
+Implement strangler fig pattern for gradual migration. Deploy to Kubernetes.
+
+# 4. Migration task breakdown
+/tasks
+# Result: Creates phased migration tasks with risk management
+
+# 5. Incremental implementation
+/implement
+# Executes migration in safe, incremental steps
+```
+
+## 🔧 Internal Architecture Deep Dive
+
+### Script System Architecture
+
+**Directory Structure:**
+```
+scripts/
+├── bash/                    # Unix/Linux optimized scripts
+│   ├── common.sh           # Shared functions and variables
+│   ├── create-new-feature.sh    # Feature branch creation
+│   ├── check-task-prerequisites.sh    # Task validation
+│   ├── setup-plan.sh       # Plan execution environment
+│   └── get-feature-paths.sh    # Path resolution utilities
+└── powershell/             # Windows/Cross-platform scripts
+    ├── common.ps1          # Shared PowerShell functions
+    ├── create-new-feature.ps1    # Feature branch creation
+    ├── check-task-prerequisites.ps1    # Task validation
+    ├── setup-plan.ps1      # Plan execution environment
+    └── get-feature-paths.ps1    # Path resolution utilities
+```
+
+**Key Script Functions:**
+
+1. **Feature Path Resolution**: Automatic detection of current feature context
+2. **MIL-STD-498 Detection**: Identifies enterprise document structure availability
+3. **Prerequisite Validation**: Ensures required documents exist before proceeding
+4. **Cross-Platform Compatibility**: Unified API across Bash and PowerShell
+5. **JSON Output**: Structured data exchange between scripts and AI agents
+
+### Template Engine Features
+
+**Smart Placeholder System:**
+```
+[PROJECT_NAME]           → Replaced with actual project name
+[FEATURE]               → Current feature being developed
+[CSCI_NAME]             → Functional area identifier
+[DATE]                  → Current date in ISO format
+[PRINCIPLE_1_NAME]      → Dynamic principle enumeration
+```
+
+**Validation System:**
+- **Constitution Checks**: Automatic governance compliance validation
+- **Dependency Gates**: Ensures proper execution order
+- **Error Recovery**: Built-in rollback and retry mechanisms
+- **Progress Tracking**: Real-time status updates
+
+**Template Inheritance:**
+- **Base Templates**: Core structure and common elements
+- **Specialized Templates**: MIL-STD-498 vs standard workflows
+- **Custom Extensions**: Project-specific customization points
+
+### CSCI Management System
+
+**Functional Area Organization:**
+```
+docs/mil-std-498/csci/
+├── authentication/
+│   ├── srs-frontend.md     # UI/UX requirements
+│   ├── srs-backend.md      # API/business logic requirements
+│   └── idd-shared.md       # Interface specifications
+├── hr/
+│   ├── srs-frontend.md
+│   ├── srs-backend.md
+│   └── idd-shared.md
+└── finance/
+    ├── srs-frontend.md
+    ├── srs-backend.md
+    └── idd-shared.md
+```
+
+**CSCI Coordination Features:**
+- **Parallel Development**: Independent frontend/backend work within CSCIs
+- **Cross-CSCI Integration**: Managed dependencies between functional areas
+- **Interface Standardization**: Consistent API contracts across CSCIs
+- **Team Isolation**: Clear boundaries for team responsibilities
 
 ## 🎯 Experimental goals
 

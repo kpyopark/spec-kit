@@ -17,6 +17,10 @@ $repoRoot = git rev-parse --show-toplevel
 $specsDir = Join-Path $repoRoot 'specs'
 New-Item -ItemType Directory -Path $specsDir -Force | Out-Null
 
+# Check for MIL-STD-498 structure
+$milStd498Dir = Join-Path $repoRoot 'docs/mil-std-498'
+$milStd498Enabled = Test-Path $milStd498Dir
+
 $highest = 0
 if (Test-Path $specsDir) {
     Get-ChildItem -Path $specsDir -Directory | ForEach-Object {
@@ -43,10 +47,20 @@ $specFile = Join-Path $featureDir 'spec.md'
 if (Test-Path $template) { Copy-Item $template $specFile -Force } else { New-Item -ItemType File -Path $specFile | Out-Null }
 
 if ($Json) {
-    $obj = [PSCustomObject]@{ BRANCH_NAME = $branchName; SPEC_FILE = $specFile; FEATURE_NUM = $featureNum }
+    $obj = [PSCustomObject]@{
+        BRANCH_NAME = $branchName;
+        SPEC_FILE = $specFile;
+        FEATURE_NUM = $featureNum;
+        MIL_STD_498_ENABLED = $milStd498Enabled;
+        MIL_STD_498_DIR = if ($milStd498Enabled) { $milStd498Dir } else { $null }
+    }
     $obj | ConvertTo-Json -Compress
 } else {
     Write-Output "BRANCH_NAME: $branchName"
     Write-Output "SPEC_FILE: $specFile"
     Write-Output "FEATURE_NUM: $featureNum"
+    Write-Output "MIL_STD_498_ENABLED: $milStd498Enabled"
+    if ($milStd498Enabled) {
+        Write-Output "MIL_STD_498_DIR: $milStd498Dir"
+    }
 }

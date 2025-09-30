@@ -12,24 +12,48 @@ scripts:
 
 ## Execution Flow (/plan command scope)
 ```
-1. Load feature spec from Input path
+1. Check for MIL-STD-498 structure and load context:
+   → Look for existing docs/mil-std-498/ directory
+   → If exists: Enable MIL-STD-498 workflow, load constitution for CSCI definitions
+   → If not: Use standard workflow
+   → Load feature spec from Input path
    → If not found: ERROR "No feature spec at {path}"
-2. Fill Technical Context (scan for NEEDS CLARIFICATION)
+
+2. Fill Technical Context (scan for NEEDS CLARIFICATION):
    → Detect Project Type from context (web=frontend+backend, mobile=app+api)
    → Set Structure Decision based on project type
+   → If MIL-STD-498 enabled: Identify target CSCI(s) from feature description
+   → Plan CSCI-based architecture considerations
+
 3. Fill the Constitution Check section based on the content of the constitution document.
-4. Evaluate Constitution Check section below
+
+4. Evaluate Constitution Check section:
    → If violations exist: Document in Complexity Tracking
    → If no justification possible: ERROR "Simplify approach first"
    → Update Progress Tracking: Initial Constitution Check
-5. Execute Phase 0 → research.md
+
+5. Execute Phase 0 → Enhanced research.md:
    → If NEEDS CLARIFICATION remain: ERROR "Resolve unknowns"
-6. Execute Phase 1 → contracts, data-model.md, quickstart.md, agent-specific template file (e.g., `CLAUDE.md` for Claude Code, `.github/copilot-instructions.md` for GitHub Copilot, `GEMINI.md` for Gemini CLI, `QWEN.md` for Qwen Code or `AGENTS.md` for opencode).
-7. Re-evaluate Constitution Check section
+   → If MIL-STD-498 enabled: Include CSCI architecture considerations
+
+6. Execute Phase 1 → Enhanced artifact generation:
+   → Standard: contracts, data-model.md, quickstart.md, agent-specific template file
+   → If MIL-STD-498 enabled: Also update relevant MIL-STD-498 documents:
+     * docs/mil-std-498/system-level/ssdd.md (architecture decisions)
+     * docs/mil-std-498/csci/[CSCI_NAME]/srs-frontend.md (frontend tech specs)
+     * docs/mil-std-498/csci/[CSCI_NAME]/srs-backend.md (backend tech specs)
+     * docs/mil-std-498/csci/[CSCI_NAME]/idd-shared.md (interface tech specs)
+
+7. Re-evaluate Constitution Check section:
    → If new violations: Refactor design, return to Phase 1
    → Update Progress Tracking: Post-Design Constitution Check
-8. Plan Phase 2 → Describe task generation approach (DO NOT create tasks.md)
-9. STOP - Ready for /tasks command
+
+8. Plan Phase 2 → Describe task generation approach (DO NOT create tasks.md):
+   → If MIL-STD-498 enabled: Plan CSCI-based task generation strategy
+   → Consider Frontend/Backend parallel development within CSCIs
+   → Identify cross-CSCI integration points
+
+9. STOP - Ready for /tasks command (with CSCI context if applicable)
 ```
 
 **IMPORTANT**: The /plan command STOPS at step 7. Phases 2-4 are executed by other commands:
@@ -40,15 +64,24 @@ scripts:
 [Extract from feature spec: primary requirement + technical approach from research]
 
 ## Technical Context
-**Language/Version**: [e.g., Python 3.11, Swift 5.9, Rust 1.75 or NEEDS CLARIFICATION]  
-**Primary Dependencies**: [e.g., FastAPI, UIKit, LLVM or NEEDS CLARIFICATION]  
-**Storage**: [if applicable, e.g., PostgreSQL, CoreData, files or N/A]  
-**Testing**: [e.g., pytest, XCTest, cargo test or NEEDS CLARIFICATION]  
+**Language/Version**: [e.g., Python 3.11, Swift 5.9, Rust 1.75 or NEEDS CLARIFICATION]
+**Primary Dependencies**: [e.g., FastAPI, UIKit, LLVM or NEEDS CLARIFICATION]
+**Storage**: [if applicable, e.g., PostgreSQL, CoreData, files or N/A]
+**Testing**: [e.g., pytest, XCTest, cargo test or NEEDS CLARIFICATION]
 **Target Platform**: [e.g., Linux server, iOS 15+, WASM or NEEDS CLARIFICATION]
-**Project Type**: [single/web/mobile - determines source structure]  
-**Performance Goals**: [domain-specific, e.g., 1000 req/s, 10k lines/sec, 60 fps or NEEDS CLARIFICATION]  
-**Constraints**: [domain-specific, e.g., <200ms p95, <100MB memory, offline-capable or NEEDS CLARIFICATION]  
+**Project Type**: [single/web/mobile - determines source structure]
+**Performance Goals**: [domain-specific, e.g., 1000 req/s, 10k lines/sec, 60 fps or NEEDS CLARIFICATION]
+**Constraints**: [domain-specific, e.g., <200ms p95, <100MB memory, offline-capable or NEEDS CLARIFICATION]
 **Scale/Scope**: [domain-specific, e.g., 10k users, 1M LOC, 50 screens or NEEDS CLARIFICATION]
+
+### MIL-STD-498 Context (if enabled)
+**MIL-STD-498 Structure**: [enabled/disabled]
+**Target CSCI(s)**: [e.g., authentication, hr, finance or N/A if disabled]
+**CSCI Architecture Considerations**:
+- **Frontend/Backend Separation**: [How this feature separates concerns within CSCI]
+- **Cross-CSCI Integration**: [Integration points with other functional areas]
+- **Interface Requirements**: [API contracts between Frontend/Backend within CSCI]
+- **Parallel Development Strategy**: [How Frontend/Backend teams can work simultaneously]
 
 ## Constitution Check
 *GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
@@ -66,6 +99,23 @@ specs/[###-feature]/
 ├── quickstart.md        # Phase 1 output (/plan command)
 ├── contracts/           # Phase 1 output (/plan command)
 └── tasks.md             # Phase 2 output (/tasks command - NOT created by /plan)
+```
+
+### MIL-STD-498 Documentation (if enabled)
+```
+docs/mil-std-498/
+├── system-level/
+│   ├── ocd.md           # Operational Concept Document (updated by /specify)
+│   └── ssdd.md          # System/Subsystem Design Document (updated by /plan)
+└── csci/
+    ├── [TARGET_CSCI]/
+    │   ├── srs-frontend.md    # Frontend requirements (updated by /specify & /plan)
+    │   ├── srs-backend.md     # Backend requirements (updated by /specify & /plan)
+    │   └── idd-shared.md      # Interface specifications (updated by /specify & /plan)
+    └── [OTHER_CSCI]/
+        ├── srs-frontend.md
+        ├── srs-backend.md
+        └── idd-shared.md
 ```
 
 ### Source Code (repository root)
@@ -103,9 +153,38 @@ api/
 
 ios/ or android/
 └── [platform-specific structure]
+
+# Option 4: CSCI-Based Structure (when MIL-STD-498 enabled)
+backend/
+├── src/
+│   ├── [CSCI_NAME]/        # e.g., authentication/
+│   │   ├── models/
+│   │   ├── services/
+│   │   └── controllers/
+│   ├── shared/             # Cross-CSCI shared components
+│   └── integration/        # Cross-CSCI integration layer
+└── tests/
+    ├── csci/
+    │   └── [CSCI_NAME]/
+    ├── integration/
+    └── unit/
+
+frontend/
+├── src/
+│   ├── [CSCI_NAME]/        # e.g., authentication/
+│   │   ├── components/
+│   │   ├── pages/
+│   │   └── services/
+│   ├── shared/             # Cross-CSCI shared components
+│   └── integration/        # Cross-CSCI integration layer
+└── tests/
+    ├── csci/
+    │   └── [CSCI_NAME]/
+    ├── integration/
+    └── unit/
 ```
 
-**Structure Decision**: [DEFAULT to Option 1 unless Technical Context indicates web/mobile app]
+**Structure Decision**: [DEFAULT to Option 1 unless Technical Context indicates web/mobile app or MIL-STD-498 CSCI structure]
 
 ## Phase 0: Outline & Research
 1. **Extract unknowns from Technical Context** above:
@@ -158,25 +237,67 @@ ios/ or android/
    - Keep under 150 lines for token efficiency
    - Output to repository root
 
-**Output**: data-model.md, /contracts/*, failing tests, quickstart.md, agent-specific file
+6. **Update MIL-STD-498 documents** (if enabled):
+   - **System-Level Updates**:
+     * Update `docs/mil-std-498/system-level/ssdd.md` with:
+       - Architecture decisions from research.md
+       - Technology stack selections
+       - System-wide design patterns
+       - Integration architecture decisions
+
+   - **CSCI-Level Updates** (for target CSCI):
+     * Update `docs/mil-std-498/csci/[CSCI_NAME]/srs-frontend.md` with:
+       - Frontend technology specifications
+       - UI architecture decisions
+       - Client-side data flow patterns
+       - Frontend performance considerations
+
+     * Update `docs/mil-std-498/csci/[CSCI_NAME]/srs-backend.md` with:
+       - Backend technology specifications
+       - Business logic architecture
+       - Data persistence decisions
+       - Backend performance considerations
+
+     * Update `docs/mil-std-498/csci/[CSCI_NAME]/idd-shared.md` with:
+       - API contract specifications
+       - Interface technology decisions
+       - Communication protocols
+       - Error handling patterns
+
+**Standard Output**: data-model.md, /contracts/*, failing tests, quickstart.md, agent-specific file
+**MIL-STD-498 Output** (if enabled): Updated SSDD and CSCI documents with technical specifications
 
 ## Phase 2: Task Planning Approach
 *This section describes what the /tasks command will do - DO NOT execute during /plan*
 
-**Task Generation Strategy**:
-- Load `.specify/templates/tasks-template.md` as base
+**Standard Task Generation Strategy**:
+- Load `templates/tasks-template.md` as base
 - Generate tasks from Phase 1 design docs (contracts, data model, quickstart)
 - Each contract → contract test task [P]
-- Each entity → model creation task [P] 
+- Each entity → model creation task [P]
 - Each user story → integration test task
 - Implementation tasks to make tests pass
 
-**Ordering Strategy**:
-- TDD order: Tests before implementation 
-- Dependency order: Models before services before UI
-- Mark [P] for parallel execution (independent files)
+**MIL-STD-498 CSCI-Based Task Generation Strategy** (if enabled):
+- Use enhanced tasks-template.md with CSCI support
+- Generate CSCI-based task groups:
+  * **CSCI Test tasks [P]**: Contract tests for Frontend/Backend/Interface per CSCI
+  * **CSCI Implementation tasks [P]**: Frontend and Backend tasks per CSCI (parallel within CSCI)
+  * **Interface tasks**: API implementation based on IDD-Shared specifications
+  * **Integration tasks**: Cross-CSCI communication and coordination
+  * **Polish tasks [P]**: CSCI-specific unit tests, performance, documentation
 
-**Estimated Output**: 25-30 numbered, ordered tasks in tasks.md
+**Enhanced Ordering Strategy**:
+- **Standard**: TDD order → Models → Services → UI → Polish
+- **MIL-STD-498**: Setup → CSCI Tests → CSCI Implementation → CSCI Integration → Polish
+- **Parallel Execution**:
+  * Different CSCIs can run in parallel [P]
+  * Frontend/Backend within same CSCI can run in parallel [P]
+  * Cross-CSCI dependencies are sequential
+
+**Estimated Output**:
+- **Standard**: 25-30 numbered, ordered tasks
+- **MIL-STD-498**: 30-50 CSCI-organized tasks with parallel execution markers
 
 **IMPORTANT**: This phase is executed by the /tasks command, NOT by /plan
 

@@ -22,6 +22,13 @@ REPO_ROOT=$(git rev-parse --show-toplevel)
 SPECS_DIR="$REPO_ROOT/specs"
 mkdir -p "$SPECS_DIR"
 
+# Check for MIL-STD-498 structure
+MIL_STD_498_DIR="$REPO_ROOT/docs/mil-std-498"
+MIL_STD_498_ENABLED=false
+if [ -d "$MIL_STD_498_DIR" ]; then
+    MIL_STD_498_ENABLED=true
+fi
+
 HIGHEST=0
 if [ -d "$SPECS_DIR" ]; then
     for dir in "$SPECS_DIR"/*; do
@@ -50,9 +57,14 @@ SPEC_FILE="$FEATURE_DIR/spec.md"
 if [ -f "$TEMPLATE" ]; then cp "$TEMPLATE" "$SPEC_FILE"; else touch "$SPEC_FILE"; fi
 
 if $JSON_MODE; then
-    printf '{"BRANCH_NAME":"%s","SPEC_FILE":"%s","FEATURE_NUM":"%s"}\n' "$BRANCH_NAME" "$SPEC_FILE" "$FEATURE_NUM"
+    printf '{"BRANCH_NAME":"%s","SPEC_FILE":"%s","FEATURE_NUM":"%s","MIL_STD_498_ENABLED":%s,"MIL_STD_498_DIR":"%s"}\n' \
+        "$BRANCH_NAME" "$SPEC_FILE" "$FEATURE_NUM" "$MIL_STD_498_ENABLED" "$MIL_STD_498_DIR"
 else
     echo "BRANCH_NAME: $BRANCH_NAME"
     echo "SPEC_FILE: $SPEC_FILE"
     echo "FEATURE_NUM: $FEATURE_NUM"
+    echo "MIL_STD_498_ENABLED: $MIL_STD_498_ENABLED"
+    if [ "$MIL_STD_498_ENABLED" = "true" ]; then
+        echo "MIL_STD_498_DIR: $MIL_STD_498_DIR"
+    fi
 fi

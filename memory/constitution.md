@@ -28,6 +28,64 @@
 [PRINCIPLE_5_DESCRIPTION]
 <!-- Example: Text I/O ensures debuggability; Structured logging required; Or: MAJOR.MINOR.BUILD format; Or: Start simple, YAGNI principles -->
 
+## Document Structure Framework (MIL-STD-498 Based)
+
+### Document Architecture
+[DOCUMENT_ARCHITECTURE]
+<!-- Example: This project follows a 6-document MIL-STD-498 based structure optimized for Frontend/Backend separation and LLM efficiency -->
+
+### Required Documents
+
+#### System-Level Documents
+- **OCD (Operational Concept Document)** - [OCD_DESCRIPTION]
+  <!-- Example: Provides business context and scenarios for LLM understanding -->
+- **SSDD (System/Subsystem Design Document)** - [SSDD_DESCRIPTION]
+  <!-- Example: Defines common architecture, technology stack, and cross-cutting standards -->
+
+#### CSCI-Level Documents (Per Feature)
+Each functional CSCI (Computer Software Configuration Item) contains:
+- **SRS-Frontend** - [SRS_FRONTEND_DESCRIPTION]
+  <!-- Example: Frontend-specific requirements for UI/UX and client-side logic -->
+- **SRS-Backend** - [SRS_BACKEND_DESCRIPTION]
+  <!-- Example: Backend-specific requirements for business logic and data handling -->
+- **IDD-Shared** - [IDD_SHARED_DESCRIPTION]
+  <!-- Example: Unified interface specification for Frontend ↔ Backend communication -->
+
+### Document Standards
+[DOCUMENT_STANDARDS]
+<!-- Example: All documents must follow MIL-STD-498 principles with templates optimized for LLM code generation -->
+
+### CSCI Directory Structure
+When MIL-STD-498 document structure is enabled, the following directory structure will be created:
+
+```
+docs/
+├── mil-std-498/
+│   ├── system-level/
+│   │   ├── ocd.md                    # Operational Concept Document
+│   │   └── ssdd.md                   # System/Subsystem Design Document
+│   └── csci/
+│       ├── [CSCI_1_NAME]/            # Example: authentication
+│       │   ├── srs-frontend.md       # Frontend Requirements
+│       │   ├── srs-backend.md        # Backend Requirements
+│       │   └── idd-shared.md         # Interface Specification
+│       ├── [CSCI_2_NAME]/            # Example: hr
+│       │   ├── srs-frontend.md
+│       │   ├── srs-backend.md
+│       │   └── idd-shared.md
+│       ├── [CSCI_3_NAME]/            # Example: finance
+│       │   ├── srs-frontend.md
+│       │   ├── srs-backend.md
+│       │   └── idd-shared.md
+│       └── [ADDITIONAL_CSCI]/        # Additional functional CSCIs
+│           ├── srs-frontend.md
+│           ├── srs-backend.md
+│           └── idd-shared.md
+```
+
+[CSCI_STRUCTURE_RATIONALE]
+<!-- Example: Feature-based CSCI structure enables modular development with clear separation of concerns while maintaining Frontend/Backend/Interface documentation for each functional area -->
+
 ## [SECTION_2_NAME]
 <!-- Example: Additional Constraints, Security Requirements, Performance Standards, etc. -->
 
