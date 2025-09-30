@@ -41,7 +41,18 @@ Spec-Driven Development **flips the script** on traditional software development
 Initialize your project depending on the coding agent you're using:
 
 ```bash
-uvx --from git+https://github.com/github/spec-kit.git specify init <PROJECT_NAME>
+uvx --from git+https://github.com/kpyopark/spec-kit.git specify init <PROJECT_NAME>
+```
+
+Or, Install once, use everywhere.
+```bash
+uv tool install specify-cli --from git+https://github.com/kpyopark/spec-kit.git
+
+specify init <PROJECT_NAME> --ai <claude, gemini...>
+
+# if you want to use it on the target project folder, use --here option.
+
+specify init --here --ai claude
 ```
 
 ### 2. Establish project principles
