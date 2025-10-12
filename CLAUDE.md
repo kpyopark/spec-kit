@@ -52,19 +52,22 @@ specify check  # Verify required tools are available
 4. `/tasks` - Break down plans into actionable tasks
 5. `/implement` - Execute the task list systematically
 
-**Enhanced MIL-STD-498 Workflow**:
-When MIL-STD-498 structure exists, `/specify` automatically:
-- Updates system-level OCD with operational scenarios
-- Updates system-level SSDD with design implications
-- Identifies functional CSCI based on feature description
-- Updates CSCI-specific SRS-Frontend, SRS-Backend, and IDD-Shared documents
-- Maintains backward compatibility with traditional spec.md
+**CSCI-Centric MIL-STD-498 Workflow**:
+When MIL-STD-498 structure exists, the workflow is CSCI-centric:
+- `/constitution` creates `csci/` directory structure with system-level and CSCI-level docs
+- `/specify` requires CSCI selection (authentication, hr, finance, or common)
+  - AI analyzes feature and suggests appropriate CSCI
+  - Creates feature in `csci/[CSCI]/features/[NUM]-[name]/`
+  - Updates `csci/[CSCI]/docs/` MIL-STD-498 documents
+  - Updates `csci/system/docs/` for system-wide impacts
+- Branch naming follows `csci-name/number-name` pattern (e.g., `authentication/001-login`)
+- Each CSCI is self-contained with docs, features, and optional src directories
 
 **Script System** (`scripts/`):
 - Cross-platform automation with bash and PowerShell variants
-- Feature branch management (expects `001-feature-name` naming pattern)
+- CSCI-based branch management (expects `csci-name/NNN-feature-name` pattern)
+- Constitution parsing to extract available CSCIs
 - Template-driven document generation and validation
-- Shared utilities in `scripts/bash/common.sh`
 
 **Template System** (`templates/`):
 - Structured templates for specifications, plans, and tasks
@@ -77,11 +80,12 @@ When MIL-STD-498 structure exists, `/specify` automatically:
 
 ### Key Architecture Patterns
 
-**Feature Branch Workflow**:
-- Features are developed on numbered branches (`001-feature-name`)
-- Each feature gets its own directory in `specs/001-feature-name/`
-- Branch name determines the specification directory path
-- Scripts validate branch naming convention before execution
+**CSCI-Based Branch Workflow**:
+- Features are developed on CSCI-scoped branches (`csci-name/NNN-feature-name`)
+- Each feature gets its own directory in `csci/[CSCI]/features/NNN-feature-name/`
+- Branch name determines both CSCI and feature directory path
+- Scripts parse branch to extract CSCI and validate naming convention
+- Feature numbering is independent per CSCI (authentication/001, hr/001, etc.)
 
 **Template-Driven Development**:
 - All documents follow structured templates with token replacement
@@ -109,16 +113,25 @@ When MIL-STD-498 structure exists, `/specify` automatically:
 │   │   └── csci/            # SRS-Frontend, SRS-Backend, IDD-Shared templates
 │   └── *-template.md        # Other document templates with placeholders
 ├── memory/
-│   └── constitution.md      # Project governance template
-├── docs/                    # Documentation and guides
-│   └── mil-std-498/         # Generated MIL-STD-498 documents (created by constitution)
-│       ├── system-level/    # System-wide OCD, SSDD documents
-│       └── csci/            # Feature-based CSCI directories
-│           ├── [feature]/   # Each functional CSCI (e.g., authentication, hr, finance)
-│           │   ├── srs-frontend.md
-│           │   ├── srs-backend.md
-│           │   └── idd-shared.md
-└── specs/                   # Generated feature specifications (created by scripts)
+│   └── constitution.md      # Project governance template (with CSCI definitions)
+└── csci/                    # CSCI-centric organization (created by constitution)
+    ├── system/
+    │   └── docs/            # System-wide OCD, SSDD documents
+    ├── authentication/      # Authentication CSCI
+    │   ├── docs/            # SRS-Frontend, SRS-Backend, IDD-Shared
+    │   ├── features/        # Feature specifications and plans
+    │   │   ├── 001-login/
+    │   │   │   ├── spec.md
+    │   │   │   ├── plan.md
+    │   │   │   ├── tasks.md
+    │   │   │   └── artifacts/  # research.md, data-model.md, contracts/
+    │   │   └── 002-password-reset/
+    │   └── src/             # Implementation code (optional)
+    │       ├── frontend/
+    │       └── backend/
+    ├── hr/                  # HR CSCI (same structure)
+    ├── finance/             # Finance CSCI (same structure)
+    └── common/              # Common/shared infrastructure CSCI
 ```
 
 ## Key Development Conventions
@@ -141,12 +154,14 @@ When MIL-STD-498 structure exists, `/specify` automatically:
 - Scripts are executed from repository root
 - JSON output is parsed for file paths and workflow state
 
-**MIL-STD-498 Integration**:
-- Constitution command automatically detects MIL-STD-498 keywords (OCD, SSDD, SRS, IDD, CSCI)
-- Creates feature-based CSCI directory structure when requested
-- Each CSCI represents a functional area (authentication, hr, finance, etc.)
+**MIL-STD-498 CSCI Integration**:
+- Constitution command detects MIL-STD-498 keywords and creates CSCI-centric structure
+- Creates `csci/system/docs/` for system-wide OCD and SSDD documents
+- Creates `csci/[CSCI]/` for each functional area with docs, features, and src directories
+- Default CSCIs: authentication, hr, finance, and common (always created)
+- CSCI selection required for /specify - AI suggests based on feature description
 - Templates use placeholder token system for consistent document generation
-- Shared IDD reduces duplication while maintaining Frontend/Backend separation
+- Each CSCI is self-contained for independent development and deployment
 
 ## Development Workflow
 

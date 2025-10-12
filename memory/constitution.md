@@ -28,63 +28,130 @@
 [PRINCIPLE_5_DESCRIPTION]
 <!-- Example: Text I/O ensures debuggability; Structured logging required; Or: MAJOR.MINOR.BUILD format; Or: Start simple, YAGNI principles -->
 
+## CSCI Structure Definition
+
+### Project CSCI Organization
+This project follows MIL-STD-498 CSCI-based organization. All features must be developed within a designated CSCI (Computer Software Configuration Item). Each CSCI represents a functional area with independent Frontend, Backend, and Interface specifications.
+
+### Defined CSCIs
+
+#### 1. Authentication CSCI
+**CSCI ID**: `authentication`
+**Purpose**: User authentication, authorization, and session management
+**Scope**:
+- Frontend: Login UI, authentication state management, protected routes
+- Backend: JWT generation, user verification, session APIs, password management
+- Interfaces: Authentication tokens, user session data, login/logout endpoints
+
+#### 2. HR CSCI
+**CSCI ID**: `hr`
+**Purpose**: Human resources and employee management
+**Scope**:
+- Frontend: Employee profiles, org charts, HR dashboards
+- Backend: Employee data management, HR workflows, payroll processing
+- Interfaces: Employee data APIs, HR event notifications, org structure endpoints
+
+#### 3. Finance CSCI
+**CSCI ID**: `finance`
+**Purpose**: Financial transactions, billing, and accounting
+**Scope**:
+- Frontend: Payment UI, transaction history, financial reports
+- Backend: Payment processing, invoice generation, accounting logic
+- Interfaces: Payment APIs, transaction events, financial data endpoints
+
+#### 4. Common CSCI
+**CSCI ID**: `common`
+**Purpose**: Shared infrastructure and cross-cutting concerns
+**Scope**:
+- Frontend: Design system, shared UI components, common utilities
+- Backend: Logging, monitoring, configuration, middleware, error handling
+- Interfaces: Common types, shared utilities, infrastructure APIs
+- Cross-CSCI: Integration features spanning multiple functional CSCIs
+
+### CSCI Selection Guidelines
+
+**Rule 1**: Single-domain feature → Use specific CSCI (authentication, hr, finance)
+**Rule 2**: Infrastructure/tooling → Use common CSCI
+**Rule 3**: Cross-cutting concerns (logging, monitoring, config) → Use common CSCI
+**Rule 4**: Multi-domain integration feature → Use common CSCI, coordinate updates to related CSCIs
+
+### CSCI-Based Git Workflow
+
+**Branch Naming**: `[csci-id]/[number]-[feature-name]`
+Examples:
+- `authentication/001-login`
+- `hr/001-employee-profile`
+- `common/001-logging-infrastructure`
+
+Each CSCI maintains independent feature numbering for better organization.
+
 ## Document Structure Framework (MIL-STD-498 Based)
 
 ### Document Architecture
 [DOCUMENT_ARCHITECTURE]
-<!-- Example: This project follows a 6-document MIL-STD-498 based structure optimized for Frontend/Backend separation and LLM efficiency -->
+<!-- Example: This project follows MIL-STD-498 CSCI-based structure with system-level and CSCI-level documentation optimized for modular development and LLM code generation -->
 
 ### Required Documents
 
 #### System-Level Documents
 - **OCD (Operational Concept Document)** - [OCD_DESCRIPTION]
-  <!-- Example: Provides business context and scenarios for LLM understanding -->
+  <!-- Example: Provides business context and operational scenarios for the entire system -->
 - **SSDD (System/Subsystem Design Document)** - [SSDD_DESCRIPTION]
-  <!-- Example: Defines common architecture, technology stack, and cross-cutting standards -->
+  <!-- Example: Defines system-wide architecture, technology stack, and design principles -->
 
-#### CSCI-Level Documents (Per Feature)
-Each functional CSCI (Computer Software Configuration Item) contains:
+#### CSCI-Level Documents (Per Functional Area)
+Each CSCI contains three synchronized documents:
 - **SRS-Frontend** - [SRS_FRONTEND_DESCRIPTION]
   <!-- Example: Frontend-specific requirements for UI/UX and client-side logic -->
 - **SRS-Backend** - [SRS_BACKEND_DESCRIPTION]
-  <!-- Example: Backend-specific requirements for business logic and data handling -->
+  <!-- Example: Backend-specific requirements for business logic and data processing -->
 - **IDD-Shared** - [IDD_SHARED_DESCRIPTION]
-  <!-- Example: Unified interface specification for Frontend ↔ Backend communication -->
+  <!-- Example: Interface specification defining Frontend ↔ Backend communication contracts -->
 
 ### Document Standards
 [DOCUMENT_STANDARDS]
-<!-- Example: All documents must follow MIL-STD-498 principles with templates optimized for LLM code generation -->
+<!-- Example: All documents follow MIL-STD-498 principles with CSCI-based modular organization for independent development and testing -->
 
 ### CSCI Directory Structure
-When MIL-STD-498 document structure is enabled, the following directory structure will be created:
+When MIL-STD-498 document structure is enabled, the following CSCI-centric directory structure will be created:
 
 ```
-docs/
-├── mil-std-498/
-│   ├── system-level/
-│   │   ├── ocd.md                    # Operational Concept Document
-│   │   └── ssdd.md                   # System/Subsystem Design Document
-│   └── csci/
-│       ├── [CSCI_1_NAME]/            # Example: authentication
-│       │   ├── srs-frontend.md       # Frontend Requirements
-│       │   ├── srs-backend.md        # Backend Requirements
-│       │   └── idd-shared.md         # Interface Specification
-│       ├── [CSCI_2_NAME]/            # Example: hr
-│       │   ├── srs-frontend.md
-│       │   ├── srs-backend.md
-│       │   └── idd-shared.md
-│       ├── [CSCI_3_NAME]/            # Example: finance
-│       │   ├── srs-frontend.md
-│       │   ├── srs-backend.md
-│       │   └── idd-shared.md
-│       └── [ADDITIONAL_CSCI]/        # Additional functional CSCIs
-│           ├── srs-frontend.md
-│           ├── srs-backend.md
-│           └── idd-shared.md
+csci/
+├── system/
+│   └── docs/
+│       ├── ocd.md                         # Operational Concept Document (system-wide)
+│       └── ssdd.md                        # System/Subsystem Design Document (system-wide)
+├── authentication/
+│   ├── docs/
+│   │   ├── srs-frontend.md                # Frontend Requirements
+│   │   ├── srs-backend.md                 # Backend Requirements
+│   │   └── idd-shared.md                  # Interface Specification
+│   ├── features/
+│   │   ├── 001-login/
+│   │   │   ├── spec.md                    # Feature specification
+│   │   │   ├── plan.md                    # Implementation plan
+│   │   │   ├── tasks.md                   # Task breakdown
+│   │   │   └── artifacts/                 # Supporting documents
+│   │   └── 002-password-reset/
+│   └── src/                               # Implementation code (optional)
+│       ├── frontend/
+│       └── backend/
+├── hr/
+│   ├── docs/
+│   ├── features/
+│   └── src/
+├── finance/
+│   ├── docs/
+│   ├── features/
+│   └── src/
+└── common/
+    ├── docs/
+    ├── features/
+    └── src/
 ```
 
 [CSCI_STRUCTURE_RATIONALE]
-<!-- Example: Feature-based CSCI structure enables modular development with clear separation of concerns while maintaining Frontend/Backend/Interface documentation for each functional area -->
+<!-- Example: CSCI-centric structure enables true modular development where each functional area (authentication, hr, finance, common) is self-contained with its own documentation, features, and implementation code. This supports independent development, testing, and deployment of CSCIs while maintaining clear separation of concerns. -->
 
 ## [SECTION_2_NAME]
 <!-- Example: Additional Constraints, Security Requirements, Performance Standards, etc. -->

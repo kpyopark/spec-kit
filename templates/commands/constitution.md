@@ -13,9 +13,10 @@ Follow this execution flow:
 
 2. Check if MIL-STD-498 document structure is requested:
    - If user mentions "MIL-STD-498", "document structure", "OCD", "SSDD", "SRS", "IDD", or "CSCI", enable MIL-STD-498 framework
-   - If enabled, create the directory structure: `docs/mil-std-498/system-level/` and `docs/mil-std-498/csci/`
-   - If user specifies CSCI names (e.g., "authentication", "hr", "finance"), create those specific CSCI folders
-   - If no specific CSCIs mentioned, ask user to specify functional CSCI names or create example structure
+   - If enabled, create CSCI-centric directory structure
+   - If user specifies CSCI names (e.g., "authentication", "hr", "finance", "common"), create those CSCIs
+   - If no specific CSCIs mentioned, use default set: authentication, hr, finance, common
+   - **Important**: "common" CSCI is ALWAYS created for shared infrastructure
 
 3. Collect/derive values for placeholders:
    - If user input (conversation) supplies a value, use it.
@@ -27,15 +28,19 @@ Follow this execution flow:
      * PATCH: Clarifications, wording, typo fixes, non-semantic refinements.
    - If version bump type ambiguous, propose reasoning before finalizing.
 
-4. Create MIL-STD-498 documents if enabled:
-   - Create `docs/mil-std-498/system-level/ocd.md` from `templates/mil-std-498/system-level/ocd-template.md`
-   - Create `docs/mil-std-498/system-level/ssdd.md` from `templates/mil-std-498/system-level/ssdd-template.md`
-   - For each CSCI specified by user, create directory `docs/mil-std-498/csci/[CSCI_NAME]/` with:
-     * `srs-frontend.md` from `templates/mil-std-498/csci/srs-frontend-template.md`
-     * `srs-backend.md` from `templates/mil-std-498/csci/srs-backend-template.md`
-     * `idd-shared.md` from `templates/mil-std-498/csci/idd-shared-template.md`
+4. Create MIL-STD-498 CSCI structure if enabled:
+   - **System-Level Documents**:
+     * Create `csci/system/docs/ocd.md` from `templates/mil-std-498/system-level/ocd-template.md`
+     * Create `csci/system/docs/ssdd.md` from `templates/mil-std-498/system-level/ssdd-template.md`
+
+   - **For each CSCI** (authentication, hr, finance, common, etc.):
+     * Create directory structure: `csci/[CSCI_NAME]/docs/`, `csci/[CSCI_NAME]/features/`, `csci/[CSCI_NAME]/src/`
+     * Create `csci/[CSCI_NAME]/docs/srs-frontend.md` from template
+     * Create `csci/[CSCI_NAME]/docs/srs-backend.md` from template
+     * Create `csci/[CSCI_NAME]/docs/idd-shared.md` from template
+
    - Replace template placeholders with project-specific values in all created documents
-   - Each CSCI represents a functional area (e.g., authentication, hr, finance) with independent Frontend/Backend/Interface documentation
+   - Each CSCI is a self-contained functional area with its own docs, features, and implementation code
 
 5. Draft the updated constitution content:
    - Replace every placeholder with concrete text (no bracketed tokens left except intentionally retained template slots that the project has chosen not to define yet—explicitly justify any left).
